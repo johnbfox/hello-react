@@ -3,37 +3,51 @@ console.log('App.js is running');
 const heya = 'wassup';
 
 const app = {
-    title: 'Star Wars',
+    title: 'Indecision App',
     options: []
 }
 
+const onFormSubmit = (event) => {
+    event.preventDefault();
+    const option = event.target.elements.option.value;
+
+    if (option) {
+        app.options.push(option);
+        event.target.elements.option.value = '';
+        console.log(app.options);
+    }
+
+    render();
+}
+
+const removeAll = () => {
+    app.options = [];
+    render();
+}
+
+const appRoot = document.getElementById('app');
 // JSX - JavaScript XML
-var template = (
-    <div>
-        <h1>{app.title}</h1>
-        {app.subtitle && <p>{app.subtitle}</p>}
-        <p>{(app.options.length > 0) ? 'Here are your options' : 'No options'}</p>
-    </div>
-);
+const render = () => {
+    const template = (
+        <div>
+            <h1>{app.title}</h1>
+            {app.subtitle && <p>{app.subtitle}</p>}
+            <p>{(app.options.length > 0) ? 'Here are your options' : 'No options'}</p>
+            <p>{app.options.length}</p>
+            <button onClick={removeAll}>Remove all</button>
+            <ol>
+                {
+                    app.options.map(option => <li key={option}>{option}</li>)
+                }
+            </ol>
+            <form onSubmit={onFormSubmit}>
+                <input type="text" name="option"></input>
+                <button>Add Option</button>
+            </form> 
+        </div>
+    )
 
-
-const user = {
-    name: 'John',
-    age: 27,
-    location: 'Boston'
+    ReactDOM.render(template, appRoot);
 }
 
-function getLocation(location) {
-    return (location) ? <p>{location}</p> : undefined;
-}
-var templateTwo = (
-    <div>
-        <h1>{user.name || 'Anonymous'}</h1>
-        {(user.age && user.age >= 18) && <p>Age: { user.age}</p>}
-        {getLocation(user.location)}
-    </div>
-)
-
-var appRoot = document.getElementById('app');
-
-ReactDOM.render(template, appRoot);
+render();
